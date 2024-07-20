@@ -73,7 +73,7 @@ function tryFindEditableElements(tentativa) {
     if (!editableElements.length  ) {
 
         if(tentativa > 10){
-            alert(`Editable elements not found `);
+            console.warn(`Editable elements not found `);
             return;
         }
         setTimeout(() => {
@@ -85,8 +85,7 @@ function tryFindEditableElements(tentativa) {
     if (editableElements.length > 0) {
         
         addMenuContext();
-
-        this.alert(`Editable elements found: ${editableElements.length} hljs: ${hljs} v:${hljs?.version}`);
+       
 
         for (const element of editableElements) {
 
@@ -234,7 +233,7 @@ function formatContent(e, cssStyles) {
         const range = selection.getRangeAt(0);
         const selectedText = selection.toString();
 
-        const newElement = document.createElement("apa-format");
+        const newElement = document.createElement("div");
         newElement.textContent = selectedText;
 
         applyStyles(newElement, _cssApa7thDefault);
