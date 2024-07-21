@@ -6,7 +6,6 @@ A Chrome extension to highlight code and apply APA styles in content editable el
 
 - Highlights code within content editable elements.
 - Applies APA styling to ensure proper formatting.
-- Supports various icon resolutions for different display needs.
 
 ## Installation
 
