@@ -10,51 +10,51 @@ Paragraph Citation padding left 2rem
 Paragraph Reference hanging indent 2rem
 */
 
-_cssCodeDefault = {
+const _cssCodeDefault = {
     lineHeight: '1',
     fontSize: '1rem',
     fontFamily: 'Consolas',
 }
 
-_cssApa7thDefault = {
-    fontFamily: 'Times New Roman',
+const _cssApa7thDefault = {
     color: 'black',
     lineHeight: '2',
     fontSize: '1rem',
     display: 'block',
+    fontFamily: 'Times New Roman',
 }   
 
-__cssStylesHeadingLevel1 = {
+const __cssStylesHeadingLevel1 = {
     fontWeight: 'bold',
     textAlign: 'center',
 }
 
-__cssStylesHeadingLevel2 = {
+const __cssStylesHeadingLevel2 = {
     fontWeight: 'bold',
     textAlign: 'left',
 }
 
-__cssStylesHeadingLevel3 = {
+const __cssStylesHeadingLevel3 = {
     fontStyle: 'italic',
     textAlign: 'left',
 }
 
-__cssStylesHeadingLevel4 = {   
+const __cssStylesHeadingLevel4 = {   
     textIndent: '3rem',
     textAlign: 'left',
 }
 
-__cssStylesParagraph = {
+const __cssStylesParagraph = {
     textIndent: '3rem',
     textAlign: 'left',
 }
 
-__cssStylesCitationParagraph = {
+const __cssStylesCitationParagraph = {
     paddingLeft: '3rem',
     textAlign: 'left',
 }
 
-__cssStylesReferenceParagraph = {
+const __cssStylesReferenceParagraph = {
     textIndent: '-3rem',
     paddingLeft: '3rem',    
     textAlign: 'left',
@@ -73,7 +73,7 @@ function tryFindEditableElements(tentativa) {
     if (!editableElements.length  ) {
 
         if(tentativa > 10){
-            console.warn(`Editable elements not found `);
+            console.log(`Editable elements not found `);
             return;
         }
         setTimeout(() => {
@@ -86,14 +86,13 @@ function tryFindEditableElements(tentativa) {
         
         addMenuContext();
        
-
         for (const element of editableElements) {
 
             element.classList.add('sn-message-editable');   
             element.addEventListener('contextmenu', function (e) {
 
                 const selection = window.getSelection();
-                if (!selection.rangeCount || selection.toString() == "") return;
+                if (!selection.rangeCount || selection.toString().trim() == "") return;
 
                 const menu = document.getElementById('sn-context-menu');
                 if (menu != null) {
@@ -122,19 +121,24 @@ function addMenuContext() {
         menu.id = 'sn-context-menu';
         menu.style.display = 'none';
         menu.classList.add('sn-context-menu');
+    
+        addMenuContextItemTitle(menu, 'APA Style 7th');
 
-        addMenuContextItemTitle(menu, 'Code');
-        addMenuContextItem(menu, 'Paste code', formatarPasteCode);
-        addMenuContextItem(menu, 'Format selection', formatCode);
-        addMenuContextItemTitle(menu, 'APA 7th');
+        addMenuContextItem(menu, 'Paragraph', formatarParagraph);
+        addMenuContextItem(menu, 'Reference Paragraph', formatarReferenceParagraph);
+        addMenuContextItem(menu, 'Citation Paragraph ', formatarCitationParagraph);
         addMenuContextItem(menu, 'Heading Level 1', formatarHeading1);
         addMenuContextItem(menu, 'Heading Level 2', formatarHeading2);
         addMenuContextItem(menu, 'Heading Level 3', formatarHeading3);
         addMenuContextItem(menu, 'Heading Level 4', formatarHeading4);
-        addMenuContextItem(menu, 'Paragraph', formatarParagraph);
-        addMenuContextItem(menu, 'Citation Paragraph ', formatarCitationParagraph);
-        addMenuContextItem(menu, 'Reference Paragraph', formatarReferenceParagraph);
-
+        addMenuContextItemTitle(menu, 'Code');
+        addMenuContextItem(menu, 'Format code', formatCode);
+        // addMenuContextItem(menu, 'Format code (Python)', formatCode.bind(null, 'python'));
+        // addMenuContextItem(menu, 'Format code (C#)', formatCode.bind(null, 'csharp'));
+        // addMenuContextItem(menu, 'Format code (Java)', formatCode.bind(null, 'java'));
+        // addMenuContextItem(menu, 'Format code (HTML)', formatCode.bind(null, 'html'));
+        // addMenuContextItem(menu, 'Format code (CSS)', formatCode.bind(null, 'css'));
+        // addMenuContextItem(menu, 'Format code (Javascript)', formatCode.bind(null, 'javascript'));
         document.body.appendChild(menu);
     }
 }
@@ -156,7 +160,7 @@ function addMenuContextItem(menu, text, func) {
     menu.appendChild(item);
 }
 
-function formatCode(e) {
+function formatCode(language, e) {
     
     const selection = window.getSelection();
     if (!selection.rangeCount) return;
@@ -166,7 +170,7 @@ function formatCode(e) {
 
     const preElement = document.createElement("pre");
     const codeElement = document.createElement("code");
-    codeElement.classList.add("language-python");
+    // codeElement.classList.add(`language-${language}`);
     codeElement.textContent = selectedText;
     preElement.appendChild(codeElement);
 
@@ -181,12 +185,7 @@ function formatCode(e) {
     selection.removeAllRanges
 
 }
-
-function formatarPasteCode(e) {
-
-}
-
-
+ 
 function formatarHeading1(e) {
     formatContent(e, __cssStylesHeadingLevel1);
 }
@@ -233,7 +232,7 @@ function formatContent(e, cssStyles) {
         const range = selection.getRangeAt(0);
         const selectedText = selection.toString();
 
-        const newElement = document.createElement("div");
+        const newElement = document.createElement("p");
         newElement.textContent = selectedText;
 
         applyStyles(newElement, _cssApa7thDefault);
