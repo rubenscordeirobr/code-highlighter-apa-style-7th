@@ -60,11 +60,30 @@ const __cssStylesReferenceParagraph = {
     textAlign: 'left',
 }
 
+window.__ContextMenuIsActivated = true;
+window.__ContextMenuUseCtrl = false;
 
-window.addEventListener('load', function () {
+window.addEventListener('load', async function () {
 
     tryFindEditableElements(0);
+
+    window.__ContextMenuIsActivated = await getChromeStorageAsync('ContextMenuIsActivated', true);
+    window.__ContextMenuUseCtrl = await getChromeStorageAsync('ContextMenuUseCtrl', true);
+    
 });
+
+async function getChromeStorageAsync(key, defaultValue)
+{
+    return new Promise((resolve, reject) => {
+        chrome.storage.local.get(key, (data) => {
+            if (data[key] == undefined) {
+                resolve(defaultValue);
+            } else {
+                resolve(data[key]);
+            }
+        });
+    });
+}
 
 function tryFindEditableElements(tentativa) {
     
@@ -90,6 +109,9 @@ function tryFindEditableElements(tentativa) {
 
             element.classList.add('sn-message-editable');   
             element.addEventListener('contextmenu', function (e) {
+
+                if(!window.__ContextMenuIsActivated) return;
+                if(window.__ContextMenuUseCtrl && !e.ctrlKey) return;
 
                 const selection = window.getSelection();
                 if (!selection.rangeCount || selection.toString().trim() == "") return;
