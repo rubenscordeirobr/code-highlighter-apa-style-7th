@@ -1,5 +1,5 @@
 .sn-message-editable {
-    border: 2px solid rgb(10, 21, 124) !important;
+    outline: 1px solid rgb(124, 124, 124) !important;
 }
 
 .sn-context-menu {
@@ -16,7 +16,7 @@
 
 .sn-context-menu-item-title{
     font-weight: bold;
-    padding: 0.25rem 0rem;
+    padding: 0.125rem 0rem;
     text-align: center;
     cursor: default;
     white-space: nowrap;
@@ -27,7 +27,7 @@
 .sn-context-menu-item {
     background-color: #fff;
     color: #000;
-    padding: 0.25rem 0.5rem;
+    padding: 0.125rem 0.5rem;
     cursor: pointer !important;
     /* prevent breaking text */
     white-space: nowrap;
